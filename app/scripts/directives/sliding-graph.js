@@ -14,7 +14,7 @@ angular.module('blockchainMonitorApp')
           // random = d3.random.normal(200),
 
         , data = d3.range(n).map(function() {return 200.0;})
-        // , avgdata = d3.range(n).map(function() {return 200.0;});
+        , avgdata = d3.range(n).map(function() {return 200.0;});
 
       var x, y, line, avgline, svg, path, avgpath, newAvg;
 
@@ -37,10 +37,10 @@ angular.module('blockchainMonitorApp')
             .x(function(d, i) { return x(i); })
             .y(function(d, i) { return y(d); });
 
-        // avgline = d3.svg.line()
-        //     .interpolate("basis")
-        //     .x(function(d, i) { return x(i); })
-        //     .y(function(d, i) { return y(d); });
+        avgline = d3.svg.line()
+            .interpolate("basis")
+            .x(function(d, i) { return x(i); })
+            .y(function(d, i) { return y(d); });
 
         if (svg)
           svg.selectAll("*").remove();
@@ -76,12 +76,12 @@ angular.module('blockchainMonitorApp')
             .attr("class", "line")
             .attr("d", line);
 
-        // avgpath = svg.append("g")
-        //     .attr("clip-path", "url(#clip)")
-        //   .append("avgpath")
-        //     .datum(avgdata)
-        //     .attr("class", "avgline")
-        //     .attr("d", avgline);
+        avgpath = svg.append("g")
+            .attr("clip-path", "url(#clip)")
+          .append("path")
+            .datum(avgdata)
+            .attr("class", "avgline")
+            .attr("d", avgline);
 
       }
 
@@ -94,10 +94,10 @@ angular.module('blockchainMonitorApp')
         // push a new data point onto the back
         // if (scope.trackData.buffer.length > 0) {
 
-        var newVal = parseFloat(scope.trackData.buffer.pop(0));
+        var newVal = parseFloat(scope.trackData.buffer.shift());
           // , lastVal = scope.trackData.last20[scope.trackData.last.length - 1];
 
-        console.log(newVal)
+        // console.log(newVal)
 
         // if (scope.trackData.last === 0.0) {
         // scope.trackData.last = newVal;
@@ -113,11 +113,12 @@ angular.module('blockchainMonitorApp')
           for (var i=0; i<scope.trackData.last20.length; i++) {
             total += scope.trackData.last20[i];
           }
+          // console.log('arr', scope.trackData.last20)
 
           newAvg = total / parseFloat(scope.trackData.last20.length);
         }
 
-        // console.log(newAvg)
+        // console.log('newavg', newAvg)
 
         var new_min_y = data[0]
           , new_max_y = data[0];
@@ -146,8 +147,11 @@ angular.module('blockchainMonitorApp')
           data.push(newVal);
         else
           data.push(data[data.length-1])
-        // if (newAvg)
-        //   avgdata.push(newAvg)
+
+        if (newAvg)
+          avgdata.push(newAvg)
+        else
+          avgdata.push(avgdata[avgdata.length-1])
 
         // redraw the line, and slide it to the left
         path
@@ -158,23 +162,25 @@ angular.module('blockchainMonitorApp')
             .ease("linear")
             .attr("transform", "translate(" + x(0) + ",0)")
             // .each("end", tick);
+            // .each("end", tick);
+            // .each("end")
+
+
+        avgpath
+            .attr("d", avgline)
+            .attr("transform", null)
+          .transition()
+            .duration(200)
+            .ease("linear")
+            .attr("transform", "translate(" + x(0) + ",0)")
             .each("end", tick);
-
-
-        // avgpath
-        //     .attr("d", avgline)
-        //     .attr("transform", null)
-        //   .transition()
-        //     .duration(200)
-        //     .ease("linear")
-        //     .attr("transform", "translate(" + x(0) + ",0)")
-        //     .each("end", tick);
 
         // pop the old data point off the front
         // if (newVal)
         data.shift();
+
         // if (newAvg)
-        //   avgdata.shift();
+        avgdata.shift();
 
         // console.log(data)
 

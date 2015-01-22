@@ -80,7 +80,7 @@ angular.module('blockchainMonitorApp')
         }
         $scope.bidTrackData.last20.push(data.bids[i].price);
         if ($scope.bidTrackData.last20.length > 20) {
-          $scope.bidTrackData.last20.pop(0);
+          $scope.bidTrackData.last20.shift()
         }
       }
 
@@ -90,7 +90,7 @@ angular.module('blockchainMonitorApp')
         }
         $scope.askTrackData.last20.push(data.asks[i].price);
         if ($scope.askTrackData.last20.length > 20) {
-          $scope.askTrackData.last20.pop(0);
+          $scope.askTrackData.last20.shift();
         }
       }
 
