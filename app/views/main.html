@@ -2,20 +2,67 @@
 
 <!-- <pre>{{ orderBook.bids | json }}</pre> -->
 
-<div style="position: absolute; left: 0; top: 0">
-  <div ng-repeat="bid in orderBook.bids">
-    <span ng-if="bid.quantity>0">
-      {{ bid.quantity }} BTC @ {{ bid.price | currency }}
-    </span>
+<h1 class="header-data">
+  Watch Count: 
+  {{ watchDensity }} per entry * 
+  ({{ activeBidCount }} bids + {{ activeAskCount }} asks) = 
+  {{ watchDensity * (activeBidCount + activeAskCount) }} watch list entries
+</h1>
+<div class="btc-panel-wrapper">
+  <div class="sliding-graph-wrapper">
+    <svg sliding-graph track-data="bidTrackData"></svg>
+  </div>
+  <div class="sliding-graph-wrapper">
+    <svg sliding-graph track-data="askTrackData"></svg>
   </div>
 </div>
+<div class="btc-panel-wrapper">
+  <div class="btc-panel">
+    <h2>Incoming bid/ask diffs</h2>
+    <pre ng-repeat="pair in newPairs track by $index"
+         ng-bind="pair | json">
+    </pre>
+  </div>
 
-<div style="position: absolute; right: 0; top: 0">
-  <div ng-repeat="ask in orderBook.asks">
-    <span ng-if="ask.quantity>0">
-      {{ ask.quantity }} BTC @ {{ ask.price | currency }}
-    </span>
+  <div class="btc-panel">
+    <h2>Bids</h2>
+    <table>
+      <tr class="ask-bid-header">
+        <th>Last Updated</th>
+        <th>Quantity (BTC)</th>
+        <th>Price per BTC (USD)</th>
+      </tr>
+      <tr class="ask-bid" 
+          ng-repeat="bid in orderBook.bids"
+          ng-if="bid.quantity>0">
+        <td>{{ bid.lastUpdated | date : 'mediumTime' }}</td>
+        <td>{{ bid.quantity }}</td>
+        <td>{{ bid.price | currency }}</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="btc-panel">
+    <h2>Asks</h2>
+    <table>
+      <tr class="ask-bid-header">
+        <th>Last Updated</th>
+        <th>Quantity (BTC)</th>
+        <th>Price per BTC (USD)</th>
+      </tr>
+      <tr class="ask-bid" 
+          ng-repeat="ask in orderBook.asks.slice().reverse()"
+          ng-if="ask.quantity>0">
+        <td>{{ ask.lastUpdated | date : 'mediumTime' }}</td>
+        <td>{{ ask.quantity }}</td>
+        <td>{{ ask.price | currency }}</td>
+      </tr>
+    </table>
+<!--     <div class="ask" ng-repeat="ask in orderBook.asks.slice().reverse()">
+      <span ng-if="ask.quantity>0">
+        {{ ask.quantity }} BTC @ {{ ask.price | currency }}
+      </span>
+    </div> -->
   </div>
 </div>
-
-<!-- <div ng-repeat="datum in data">{{datum}}</div> -->
+  <!-- <div ng-repeat="datum in data">{{datum}}</div> -->

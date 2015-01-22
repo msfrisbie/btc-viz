@@ -19,10 +19,16 @@ angular.module('blockchainMonitorApp.services.blockchain', [])
     //     conn.send('{"op":"unconfirmed_sub"}');
     //   }
     
-    ws.onmessage = function(message) {
-        console.log('transaction', JSON.parse(message.data))
-        // listener(JSON.parse(message.data));
-    };
+    // ws.onmessage = function(message) {
+    //     if (false)
+    //         console.log('transaction', JSON.parse(message.data))
+    // };
+
+    Service.getTicker = function(cb) {
+        ws.onmessage = function(message) {
+            cb(JSON.parse(message.data))
+        }
+    }
 
     // function sendRequest(request) {
     //   var defer = $q.defer();

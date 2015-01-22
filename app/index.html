@@ -22,9 +22,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
-      <div ng-view=""></div>
-    </div>
+    <div ng-view=""></div>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -61,6 +59,7 @@
     <script src="bower_components/pusher-angular/lib/pusher-angular.js"></script>
     <script src="bower_components/lodash/dist/lodash.compat.js"></script>
     <script src="bower_components/restangular/dist/restangular.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -73,9 +72,10 @@
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="scripts/app.js"></script>
         <script src="scripts/controllers/main.js"></script>
-        <script src="scripts/controllers/about.js"></script>
+        <script src="scripts/controllers/ticker.js"></script>
         <script src="scripts/services/blockchain.js"></script>
         <script src="scripts/services/bitstamp.js"></script>
+        <script src="scripts/directives/sliding-graph.js"></script>
         <!-- endbuild -->
 </body>
 </html>

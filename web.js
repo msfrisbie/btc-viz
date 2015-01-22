@@ -36,3 +36,32 @@ app.get('/bitstamp', function(req, res){
   http.request(options, callback).end();
 
 });
+
+app.get('/ticker', function(req, res){
+
+  var options = {
+    host: 'www.bitstamp.net',
+    path: '/api/ticker/'
+  };
+
+  var callback = function(response) {
+    var str = '';
+
+    //another chunk of data has been recieved, so append it to `str`
+    response.on('data', function (chunk) {
+      str += chunk;
+    });
+
+    //the whole response has been recieved, so we just print it out here
+    response.on('end', function () {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.write(str);
+      res.end();
+    });
+  }
+
+  http.request(options, callback).end();
+
+});
+
+console.log('\nReady!')
